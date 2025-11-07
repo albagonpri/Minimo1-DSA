@@ -1,9 +1,9 @@
 package edu.upc.dsa.services;
 
 
-import edu.upc.dsa.TracksManager;
-import edu.upc.dsa.TracksManagerImpl;
-import edu.upc.dsa.models.Track;
+import edu.upc.dsa.Manager;
+import edu.upc.dsa.ManagerImpl;
+import edu.upc.dsa.models.Llibre;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -13,17 +13,16 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 
 @Api(value = "/tracks", description = "Endpoint to Track Service")
 @Path("/tracks")
 public class TracksService {
 
-    private TracksManager tm;
+    private Manager tm;
 
     public TracksService() {
-        this.tm = TracksManagerImpl.getInstance();
+        this.tm = ManagerImpl.getInstance();
         if (tm.size()==0) {
             this.tm.addTrack("La Barbacoa", "Georgie Dann");
             this.tm.addTrack("Despacito", "Luis Fonsi");
@@ -36,15 +35,15 @@ public class TracksService {
     @GET
     @ApiOperation(value = "get all Track", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Track.class, responseContainer="List"),
+            @ApiResponse(code = 201, message = "Successful", response = Llibre.class, responseContainer="List"),
     })
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTracks() {
 
-        List<Track> tracks = this.tm.findAll();
+        List<Llibre> llibres = this.tm.findAll();
 
-        GenericEntity<List<Track>> entity = new GenericEntity<List<Track>>(tracks) {};
+        GenericEntity<List<Llibre>> entity = new GenericEntity<List<Llibre>>(llibres) {};
         return Response.status(201).entity(entity).build()  ;
 
     }
@@ -52,13 +51,13 @@ public class TracksService {
     @GET
     @ApiOperation(value = "get a Track", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Track.class),
+            @ApiResponse(code = 201, message = "Successful", response = Llibre.class),
             @ApiResponse(code = 404, message = "Track not found")
     })
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTrack(@PathParam("id") String id) {
-        Track t = this.tm.getTrack(id);
+        Llibre t = this.tm.getTrack(id);
         if (t == null) return Response.status(404).build();
         else  return Response.status(201).entity(t).build();
     }
@@ -71,7 +70,7 @@ public class TracksService {
     })
     @Path("/{id}")
     public Response deleteTrack(@PathParam("id") String id) {
-        Track t = this.tm.getTrack(id);
+        Llibre t = this.tm.getTrack(id);
         if (t == null) return Response.status(404).build();
         else this.tm.deleteTrack(id);
         return Response.status(201).build();
@@ -84,9 +83,9 @@ public class TracksService {
             @ApiResponse(code = 404, message = "Track not found")
     })
     @Path("/")
-    public Response updateTrack(Track track) {
+    public Response updateTrack(Llibre llibre) {
 
-        Track t = this.tm.updateTrack(track);
+        Llibre t = this.tm.updateTrack(llibre);
 
         if (t == null) return Response.status(404).build();
 
@@ -98,18 +97,18 @@ public class TracksService {
     @POST
     @ApiOperation(value = "create a new Track", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response=Track.class),
+            @ApiResponse(code = 201, message = "Successful", response= Llibre.class),
             @ApiResponse(code = 500, message = "Validation Error")
 
     })
 
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response newTrack(Track track) {
+    public Response newTrack(Llibre llibre) {
 
-        if (track.getSinger()==null || track.getTitle()==null)  return Response.status(500).entity(track).build();
-        this.tm.addTrack(track);
-        return Response.status(201).entity(track).build();
+        if (llibre.getSinger()==null || llibre.getTitle()==null)  return Response.status(500).entity(llibre).build();
+        this.tm.addTrack(llibre);
+        return Response.status(201).entity(llibre).build();
     }
 
 }

@@ -54,7 +54,7 @@ public class Main {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+   public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
 
         StaticHttpHandler staticHttpHandler = new StaticHttpHandler("./public/");
@@ -68,4 +68,3 @@ public class Main {
         server.stop();
     }
 }
-
