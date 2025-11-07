@@ -8,13 +8,13 @@ import edu.upc.dsa.models.Prestec;
 
 import java.util.List;
 
-    public interface Manager {
-       public Lector afegirLector(String idLector, String nom, String cognoms, String DNI, String data_neix, String address);
-       public Llibre emmagatzemarLlibre(String id, String ISBN, String titol, String editorial, int any_publicacio, int numedicio, String autor, String tematica) throws LlibreNotFoundException;
-       public Llibre catalogarLlibre() throws LlibreNotFoundException;
-       public Prestec prestarLlibre(String idPrestec, String idLlibre, String idLector, String data_inici, String data_fi);
-       public List<Prestec> consultarPrestecs(String idPrestec,String idLector, String ISBN, String data_inici, String data_fi) throws LectorNotFoundException,LlibreNotFoundException;
-       public void clear();
-       public int size();
-       List<Prestec> consultarPrestecs(String idLector) throws LectorNotFoundException, LlibreNotFoundException;
+public interface Manager {
+    Lector afegirLector(String idLector, String nom, String cognoms, String DNI, String data_neix, String lloc_neix, String address);
+    Llibre emmagatzemarLlibre(String id, String ISBN, String titol, String editorial, int any_publicacio, int numedicio, String autor, String tematica) throws LlibreNotFoundException;
+    Llibre catalogarLlibre() throws LlibreNotFoundException;
+    Prestec prestarLlibre(String idPrestec, String idLector, String idLlibre, String data_inici, String data_fi) throws LectorNotFoundException, LlibreNotFoundException;
+    List<Prestec> consultarPrestecs(String idLector) throws LectorNotFoundException, LlibreNotFoundException;;
+    void clear();
+    int size();
 }
+

@@ -1,104 +1,64 @@
 package edu.upc.dsa;
 
 import edu.upc.dsa.exceptions.LlibreNotFoundException;
-import edu.upc.dsa.models.Llibre;
-import edu.upc.dsa.models.Prestec;
-import edu.upc.dsa.models.Lector;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import edu.upc.dsa.models.Llibre;
+import edu.upc.dsa.models.Lector;
+import edu.upc.dsa.models.Prestec;
 
-import java.util.List;
+import static org.junit.Assert.*;
 
 public class ManagerImplTest {
-    Manager tm;
+    private Manager mng;
 
     @Before
-    public void setUp() {
-        this.tm = ManagerImpl.getInstance();
-        this.tm.afegirLector("1", "Alba", "Gonzalez Prieto", 44662676, 21.01.2003, "badalona");
-        this.tm.afegirLector("2", "Adrian", "Aira Saco", 1234567, 28.05.2003, "lugo");
-    }
+    public void setUp() throws LlibreNotFoundException {
+        this.mng = ManagerImpl.getInstance();
 
+        mng.afegirLector("1", "Alba", "Gonzalez", "44662676", "21.01.2003", "Ourense", "Badalona");
+        String[][] booksData1 = {
+                {"JV7d", "The Steam House", "Forgotten Books", "First Edition", "1880", "978-1605062234", "Jules Verne", "Adventures"},
+                {"JV4a", "The Mysterious Island", "Barnes & Noble Classics", "First Edition", "1874", "978-1435149408", "Jules Verne", "Adventures"},
+                {"JV1", "Journey to the Center of the Earth", "Dover Publications", "First Edition", "1864", "978-0486268685", "Jules Verne", "Adventures"},
+                {"JV3", "Around the World in Eighty Days", "CreateSpace", "First Edition", "1872", "978-1516887907", "Jules Verne", "Adventures"},
+                {"JV4c", "The Mysterious Island", "Barnes & Noble Classics", "First Edition", "1874", "978-1435149408", "Jules Verne", "Adventures"},
+                {"JV8", "The Begum's Fortune", "BiblioBazaar", "First Edition", "1879", "978-1103325575", "Jules Verne", "Adventures"},
+                {"JV7c", "The Steam House", "Forgotten Books", "First Edition", "1880", "978-1605062234", "Jules Verne", "Adventures"},
+                {"JV5", "The Adventures of Captain Hatteras", "Wordsworth Editions", "First Edition", "1866", "978-1853260257", "Jules Verne", "Adventures"},
+                {"JV2b", "Twenty Thousand Leagues Under the Sea", "Signet Classics", "First Edition", "1870", "978-0451530960", "Jules Verne", "Adventures"},
+                {"JV2c", "Twenty Thousand Leagues Under the Sea", "Signet Classics", "First Edition", "1870", "978-0451530960", "Jules Verne", "Adventures"},
+                // numStack: 0
+                {"JV2a", "Twenty Thousand Leagues Under the Sea", "Signet Classics", "First Edition", "1870", "978-0451530960", "Jules Verne", "Adventures"},
+                {"JV6", "From the Earth to the Moon", "Oxford University Press", "First Edition", "1865", "978-0199538474", "Jules Verne", "Adventures"},
+                {"JV7a", "The Steam House", "Forgotten Books", "First Edition", "1880", "978-1605062234", "Jules Verne", "Adventures"},
+                {"JV4b", "The Mysterious Island", "Barnes & Noble Classics", "First Edition", "1874", "978-1435149408", "Jules Verne", "Adventures"},
+                {"JV7b", "The Steam House", "Forgotten Books", "First Edition", "1880", "978-1605062234", "Jules Verne", "Adventures"}
+        };
+
+    }
     @After
-    public void tearDown() {
-        // És un Singleton
-        this.tm.clear();
+    public void tearDown(){
+        this.mng.clear();
     }
-
     @Test
-    public void addLlibre() {
-        Assert.assertEquals(3, tm.size());
-
-        this.tm.addTrack("La Vereda De La Puerta De Atrás", "Extremoduro");
-
-        Assert.assertEquals(4, tm.size());
+    public void testAfegirLector() {
 
     }
-
     @Test
-    public void getTrackTest() throws Exception {
-        Assert.assertEquals(3, tm.size());
-
-        Llibre t = this.tm.getTrack("T2");
-        Assert.assertEquals("Despacito", t.getTitle());
-        Assert.assertEquals("Luis Fonsi", t.getSinger());
-
-        t = this.tm.getTrack2("T2");
-        Assert.assertEquals("Despacito", t.getTitle());
-        Assert.assertEquals("Luis Fonsi", t.getSinger());
-
-        Assert.assertThrows(LlibreNotFoundException.class, () ->
-                this.tm.getTrack2("XXXXXXX"));
+    public void testEmmagatzemarLlibre() {
 
     }
-
     @Test
-    public void getTracksTest() {
-        Assert.assertEquals(3, tm.size());
-        List<Llibre> llibres = tm.findAll();
-
-        Llibre t = llibres.get(0);
-        Assert.assertEquals("La Barbacoa", t.getTitle());
-        Assert.assertEquals("Georgie Dann", t.getSinger());
-
-        t = llibres.get(1);
-        Assert.assertEquals("Despacito", t.getTitle());
-        Assert.assertEquals("Luis Fonsi", t.getSinger());
-
-        t = llibres.get(2);
-        Assert.assertEquals("Ent3r S4ndm4n", t.getTitle());
-        Assert.assertEquals("Metallica", t.getSinger());
-
-        Assert.assertEquals(3, tm.size());
-
+    public  void testCatalogarLlibre() {
     }
-
     @Test
-    public void updateTrackTest() {
-        Assert.assertEquals(3, tm.size());
-        Llibre t = this.tm.getTrack("T3");
-        Assert.assertEquals("Ent3r S4ndm4n", t.getTitle());
-        Assert.assertEquals("Metallica", t.getSinger());
-
-        t.setTitle("Enter Sandman");
-        this.tm.updateTrack(t);
-
-        t = this.tm.getTrack("T3");
-        Assert.assertEquals("Enter Sandman", t.getTitle());
-        Assert.assertEquals("Metallica", t.getSinger());
+    public void testPrestarLlibre() {
     }
-
-
     @Test
-    public void deleteTrackTest() {
-        Assert.assertEquals(3, tm.size());
-        this.tm.deleteTrack("T3");
-        Assert.assertEquals(2, tm.size());
-
-        Assert.assertThrows(LlibreNotFoundException.class, () ->
-                this.tm.getTrack2("T3"));
+    public void testConsultarPrestecs(){
 
     }
+
 }
