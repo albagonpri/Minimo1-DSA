@@ -7,6 +7,7 @@ import edu.upc.dsa.exceptions.LlibreNotFoundException;
 import edu.upc.dsa.models.Lector;
 import edu.upc.dsa.models.Llibre;
 import edu.upc.dsa.models.Prestec;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -24,16 +25,14 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class BiblioService {
 
-    private final Manager manager;
+    private Manager manager;
 
-    public BiblioService() {
+    public BiblioService() throws LlibreNotFoundException {
         this.manager = ManagerImpl.getInstance();
-        try {
-            if (this.manager.size() == 0) {
-                this.manager.afegirLector("1", "Alba", "Gonzalez", "44662676B", "21.01.2003", "Ourense", "Badalona");
-                this.manager.emmagatzemarLlibre("JV7d", "978-1605062234", "Te Steam House", "Forgotten Books", 1880, 1, "Jules Verne", "Adventues");
-            }
-        } catch (Exception ignored) {}
+        if (this.manager.size() == 0) {
+            this.manager.afegirLector("1", "Alba", "Gonzalez", "44662676B", "21.01.2003", "Ourense", "Badalona");
+            this.manager.emmagatzemarLlibre("JV7d", "978-1605062234", "The Steam House", "Forgotten Books", 1880, 1, "Jules Verne", "Adventures");
+        }
     }
 
     @POST
@@ -87,10 +86,10 @@ public class BiblioService {
     @Path("/munt/catalogar")
     public Response catalogarLlibre() {
         try {
-            Llibre llibreCatalogat = manager.catalogarLlibre();
-            return Response.ok(llibreCatalogat).build();
+            Llibre llibreCatalogat = this.manager.catalogarLlibre();
+            return Response.status(200).entity(llibreCatalogat).build();
         } catch (LlibreNotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No queden llibres").build();
+            return Response.status(404).entity("No queden llibres").build();
         }
     }
 
@@ -100,21 +99,20 @@ public class BiblioService {
             @ApiResponse(code = 201, message = "S'ha realitzat correctament", response = Prestec.class),
             @ApiResponse(code = 400, message = "Falta informacio"),
             @ApiResponse(code = 404, message = "Lector o llibre no trobat"),
-            @ApiResponse(code = 409, message = "No hi ha exemplars disponibles")
     })
     @Path("/prestecs")
     public Response prestarLlibre(Prestec prestec) {
         if (prestec == null || prestec.getIdPrestec() == null || prestec.getIdLector() == null || prestec.getIdLlibre() == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Falta informacio").build();
+            return Response.status(400).entity("Falta informacio").build();
         }
         try {
             Prestec p = manager.prestarLlibre(
                     prestec.getIdPrestec(), prestec.getIdLector(), prestec.getIdLlibre(),
                     prestec.getData_inici(), prestec.getData_fi()
             );
-            return Response.status(Response.Status.CREATED).entity(p).build();
+            return Response.status(200).entity(p).build();
         } catch (LectorNotFoundException | LlibreNotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Lector o llibre no trobat").build();
+            return Response.status(404).entity("Lector o llibre no trobat").build();
         }
     }
 
@@ -129,9 +127,9 @@ public class BiblioService {
         try {
             List<Prestec> prestecs = manager.consultarPrestecs(lectorId);
             GenericEntity<List<Prestec>> entity = new GenericEntity<List<Prestec>>(prestecs) {};
-            return Response.ok(entity).build();
+            return Response.status(200).entity("Realitzat correctament").build();
         } catch (LectorNotFoundException | LlibreNotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Lector no trobat").build();
+            return Response.status(404).entity("Lector no trobat").build();
         }
     }
 
@@ -140,11 +138,5 @@ public class BiblioService {
     public Response clear() {
         manager.clear();
         return Response.ok().build();
-    }
-
-    @GET
-    @Path("/size")
-    public Response size() {
-        return Response.ok(manager.size()).build();
     }
 }

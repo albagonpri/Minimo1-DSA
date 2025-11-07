@@ -7,6 +7,7 @@ public class Prestec {
     String data_fi;
     Boolean enTramit;
 
+    public Prestec() {}
     public Prestec(String idPrestec, String idLector, String idLlibre, String data_inici, String data_fi) {
         this.idPrestec = idPrestec;
         this.idLector = idLector;
