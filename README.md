@@ -1,6 +1,13 @@
 # Mínim 1 DSA
 Part 1:
-falta el test
+
+	- Entitats d'informació i les seves propietats.
+	- Especificació del component que implementa les operacions
+	- Implementació d'una façana 
+    - Implementació d'una prova (la captura de que funciona està al document d'entrega a ATENEA)
+
+
 Part 2:
-funciona (retorna codi esperat): clear, nou lector, emmagatzemar llibre, catalogar llibre, consultar prestec
-no funciona (retorna codi error):prestec
+
+
+	- Serveis definits i comprovats amb el swagger (les captures es troben al mateix fitxer que la part 1)
